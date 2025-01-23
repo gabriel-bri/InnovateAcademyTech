@@ -26,7 +26,7 @@ class Aula(SQLModel, table=True):
     id_aula: Optional[int] = Field(default=None, primary_key=True)
     titulo: str
     descricao: Optional[str]
-    duracao: time
+    duracao: str
     material: Optional[str]
     modulo_id: Optional[int] = Field(default=None, foreign_key="modulo.id_modulo")
     modulo: Optional["Modulo"] = Relationship(back_populates="aulas")
