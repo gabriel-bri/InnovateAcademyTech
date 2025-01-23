@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
-from Database.database import create_db_and_tables
-from Routes import alunos, cursos, aulas, avaliacao, categoria, certificado, inscricao, instrutor, modulo,suporte
+from app.Database.database import create_db_and_tables
+from app.Routes import alunos, cursos, aulas, avaliacao, categoria, certificado, inscricao, instrutor, modulo,suporte
 
 create_db_and_tables()
 # Caminho do arquivo de log
