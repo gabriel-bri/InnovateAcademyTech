@@ -1,9 +1,9 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import select, Session
-from Models.models import Inscricao
+from app.Models.models import Inscricao
 from sqlalchemy import func
-from Database.database import get_session  
+from app.Database.database import get_session  
 from typing import Dict, Any
 from typing import List, Optional
 from datetime import datetime

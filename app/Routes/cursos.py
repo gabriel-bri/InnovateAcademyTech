@@ -1,9 +1,9 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import select, Session
-from Models.models import Curso
+from app.Models.models import Curso
 from sqlalchemy import func
-from Database.database import get_session  
+from app.Database.database import get_session  
 from typing import Dict, Any
 from typing import List, Optional
 from datetime import datetime
@@ -24,7 +24,7 @@ def criar_curso(curso: Curso, session: Session = Depends(get_session)):
 
 @router.get("/cursos", response_model=list[Curso])
 def listar_cursos(session: Session = Depends(get_session)):
-    try:
+    # try:
         cursos = session.exec(select(Curso)).all()
         if not cursos:
             raise HTTPException(status_code=404, detail="Nenhum curso cadastrado.")
@@ -32,13 +32,13 @@ def listar_cursos(session: Session = Depends(get_session)):
         logging.info(f"Listagem de cursos realizada com sucesso. Total de cursos: {len(cursos)}")
         return cursos
     
-    except HTTPException as http_exc:
-        # Captura a HTTPException e relança
-        logging.error(f"Erro: {http_exc.detail}")
-        raise http_exc
-    except Exception as e:
-        logging.error(f"Erro ao listar cursos: {str(e)}")
-        raise HTTPException(status_code=500, detail="Erro ao listar cursos.")
+    # except HTTPException as http_exc:
+    #     # Captura a HTTPException e relança
+    #     logging.error(f"Erro: {http_exc.detail}")
+    #     raise http_exc
+    # except Exception as e:
+    #     logging.error(f"Erro ao listar cursos: {str(e)}")
+    #     raise HTTPException(status_code=500, detail="Erro ao listar cursos.")
 
 @router.put("/cursos/{id_curso}")
 def atualizar_curso(id_curso: int, curso_atualizado: Curso, session: Session = Depends(get_session)):

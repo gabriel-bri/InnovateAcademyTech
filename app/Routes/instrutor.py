@@ -1,9 +1,9 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import select, Session
-from Models.models import Instrutor, Curso
+from app.Models.models import Instrutor, Curso
 from sqlalchemy import func
-from Database.database import get_session  
+from app.Database.database import get_session  
 from typing import Dict, Any, Optional, List
 
 router = APIRouter()

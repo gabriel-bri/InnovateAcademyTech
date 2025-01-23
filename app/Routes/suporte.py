@@ -1,110 +1,110 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import select, Session
-from Models.models import Modulo, Suporte
+from app.Models.models import Suporte
 from sqlalchemy import func
-from Database.database import get_session  
+from app.Database.database import get_session  
 from typing import Dict, Any
 from typing import List, Optional
 from datetime import datetime
 
 router = APIRouter()
 
-@router.post("/modulos", response_model=Modulo)
-def criar_modulo(modulo: Modulo, session: Session = Depends(get_session)):
+@router.post("/suportes", response_model=Suporte)
+def criar_suporte(suporte: Suporte, session: Session = Depends(get_session)):
     try:
-        session.add(modulo)
+        session.add(suporte)
         session.commit()
-        session.refresh(modulo)
-        logging.info(f"Módulo criado com sucesso: {modulo.id_modulo}")
-        return modulo
+        session.refresh(suporte)
+        logging.info(f"suporte criado com sucesso: {suporte.id_suporte}")
+        return suporte
     except Exception as e:
-        logging.error(f"Erro ao criar módulo: {str(e)}")
-        raise HTTPException(status_code=500, detail="Erro ao criar módulo.")
+        logging.error(f"Erro ao criar suporte: {str(e)}")
+        raise HTTPException(status_code=500, detail="Erro ao criar suporte.")
 
-@router.get("/modulos", response_model=list[Modulo])
-def listar_modulos(session: Session = Depends(get_session)):
+@router.get("/suportes", response_model=list[Suporte])
+def listar_suportes(session: Session = Depends(get_session)):
     try:
-        modulos = session.exec(select(Modulo)).all()
-        if not modulos:
-            raise HTTPException(status_code=404, detail="Nenhum módulo encontrado.")
+        suportes = session.exec(select(Suporte)).all()
+        if not suportes:
+            raise HTTPException(status_code=404, detail="Nenhum suporte encontrado.")
         
-        logging.info(f"Listagem de módulos realizada com sucesso. Total de módulos: {len(modulos)}")
-        return modulos
+        logging.info(f"Listagem de suportes realizada com sucesso. Total de suportes: {len(suportes)}")
+        return suportes
     
     except HTTPException as http_exc:
         logging.error(f"Erro: {http_exc.detail}")
         raise http_exc
     except Exception as e:
-        logging.error(f"Erro ao listar módulos: {str(e)}")
-        raise HTTPException(status_code=500, detail="Erro ao listar módulos.")
+        logging.error(f"Erro ao listar suportes: {str(e)}")
+        raise HTTPException(status_code=500, detail="Erro ao listar suportes.")
 
-@router.put("/modulos/{id_modulo}")
-def atualizar_modulo(id_modulo: int, modulo_atualizado: Modulo, session: Session = Depends(get_session)):
+@router.put("/suportes/{id_suporte}")
+def atualizar_suporte(id_suporte: int, suporte_atualizado: Suporte, session: Session = Depends(get_session)):
     try:
-        modulo = session.get(Modulo, id_modulo)
-        if modulo is None:
-            raise HTTPException(status_code=404, detail="Módulo não encontrado")
+        suporte = session.get(Suporte, id_suporte)
+        if suporte is None:
+            raise HTTPException(status_code=404, detail="Suporte não encontrado")
         
-        update_data = modulo_atualizado.dict(exclude_unset=True)
+        update_data = suporte_atualizado.dict(exclude_unset=True)
         for key, value in update_data.items():
-            setattr(modulo, key, value)
+            setattr(suporte, key, value)
         
-        session.add(modulo)
+        session.add(suporte)
         session.commit()
-        session.refresh(modulo)
-        logging.info(f"Módulo atualizado com sucesso: {id_modulo}")
-        return modulo
+        session.refresh(suporte)
+        logging.info(f"Suporte atualizado com sucesso: {id_suporte}")
+        return suporte
     
     except HTTPException as http_exc:
         logging.error(f"Erro: {http_exc.detail}")
         raise http_exc
     except Exception as e:
-        logging.error(f"Erro ao atualizar módulo: {str(e)}")
-        raise HTTPException(status_code=500, detail="Erro ao atualizar módulo.")
+        logging.error(f"Erro ao atualizar suporte: {str(e)}")
+        raise HTTPException(status_code=500, detail="Erro ao atualizar suporte.")
 
-@router.delete("/modulos/{id_modulo}")
-def excluir_modulo(id_modulo: int, session: Session = Depends(get_session)):
+@router.delete("/suportes/{id_suporte}")
+def excluir_suporte(id_suporte: int, session: Session = Depends(get_session)):
     try:
-        modulo = session.get(Modulo, id_modulo)
-        if modulo is None:
-            raise HTTPException(status_code=404, detail="Módulo não encontrado")
+        suporte = session.get(Suporte, id_suporte)
+        if suporte is None:
+            raise HTTPException(status_code=404, detail="Suporte não encontrado")
         
-        session.delete(modulo)
+        session.delete(suporte)
         session.commit()
-        logging.info(f"Módulo excluído com sucesso: {id_modulo}")
-        return {"message": "Módulo excluído com sucesso"}
+        logging.info(f"Suporte excluído com sucesso: {id_suporte}")
+        return {"message": "Suporte excluído com sucesso"}
     
     except HTTPException as http_exc:
         logging.error(f"Erro: {http_exc.detail}")
         raise http_exc
     except Exception as e:
-        logging.error(f"Erro ao excluir módulo: {str(e)}")
-        raise HTTPException(status_code=500, detail="Erro ao excluir módulo.")
+        logging.error(f"Erro ao excluir suporte: {str(e)}")
+        raise HTTPException(status_code=500, detail="Erro ao excluir suporte.")
 
-@router.get("/modulos/quantidade")
-def quantidade_modulos(session: Session = Depends(get_session)):
+@router.get("/suportes/quantidade")
+def quantidade_suportes(session: Session = Depends(get_session)):
     try:
-        total_modulos = session.exec(select(Modulo)).all()
-        quantidade = len(total_modulos)
-        logging.info(f"Quantidade de módulos obtida: {quantidade}")
-        return {"quantidade modulos": quantidade}
+        total_suportes = session.exec(select(Suporte)).all()
+        quantidade = len(total_suportes)
+        logging.info(f"Quantidade de suportes obtida: {quantidade}")
+        return {"quantidade suportes": quantidade}
     
     except Exception as e:
-        logging.error(f"Erro ao contar os módulos: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Erro ao contar os módulos: {str(e)}")
+        logging.error(f"Erro ao contar os suportes: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao contar os suportes: {str(e)}")
 
-@router.get("/modulos/paginados", response_model=Dict[str, Any])
-def paginacao_modulos(
+@router.get("/suportes/paginados", response_model=Dict[str, Any])
+def paginacao_suportes(
     offset: int = Query(0, ge=0),
     limit: int = Query(10, ge=1),
     session: Session = Depends(get_session)
 ):
     try:
-        total = session.execute(select(func.count(Modulo.id_modulo))).scalar_one_or_none() or 0
+        total = session.execute(select(func.count(Suporte.id_suporte))).scalar_one_or_none() or 0
         
-        result = session.execute(select(Modulo).offset(offset).limit(limit))
-        modulos = result.scalars().all()
+        result = session.execute(select(Suporte).offset(offset).limit(limit))
+        suportes = result.scalars().all()
 
         current_page = (offset // limit) + 1
         total_pages = (total // limit) + (1 if total % limit > 0 else 0)
@@ -112,7 +112,7 @@ def paginacao_modulos(
         logging.info(f"Paginação realizada: Página {current_page}/{total_pages}, Total de registros: {total}")
         
         return {
-            "data": modulos,
+            "data": suportes,
             "pagination": {
                 "total": total,
                 "current_page": current_page,
